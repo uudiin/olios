@@ -1,0 +1,38 @@
+
+目前只支持 FAT32分区
+活动的FAT32分区必须是主分区
+
+启动过程：
+MBR：               7C00
+FAT32引导扇区：      7C00
+FAT32额外引导代码：   8000
+ZHLDR：             9000
+ZHOSKRNL：          ----
+
+
+
+how to make a olios fat32 partition (formated by win7)
+
+1.   169 : BOOTMGR  ->  ZHLDR       // 要加载的 LOADER
+1.1  d69 : BOOTMGR  ->  ZHLDR
+2.   180 :          ->  oliexztj    // 增加 OS 的引导标志
+3.  1881 : 0x2000   ->  0x900       // LOADER 被加载的段
+4.  18dc : 0x2000   ->  0x900       // jmp far ptr 2000h:0
+
+5.    11h:                          // HiddenSectors
+
+
+
+how to add to win7 loader list
+
+bcdedit /create /d “GRUB4DOS” /application bootsector
+
+bcdedit /set {GUID} device boot
+bcdedit /set {GUID} path \winldr
+bcdedit /displayorder {GUID} /addlast
+
+
+how to add to xp loader list
+C:\winldr="olios"
+
+
